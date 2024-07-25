@@ -1,11 +1,11 @@
 <template>
-  <div class="expandDetail">
-    <div class="inline" v-for="step in steps" :key="step.key">
+  <div class="expandDetail" ref="expandDetail">
+    <div class="inline" v-for="step in steps" :key="step.columnName">
       <Checkbox
-        v-model="row[item.key]"
-        @on-change="handleCheck(row, item.key, row[item.key])"
+        v-model="row[step.columnName]"
+        @on-change="handleCheck(row, step.columnName, row[step.columnName])"
       >
-        {{ item.title }}
+        {{ step.chineseName }}
       </Checkbox>
     </div>
   </div>
@@ -22,23 +22,28 @@ export default {
     row: {
       type: Object,
       default: () => {},
-    }
+    },
+    handleCheck: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     return {};
-  },
-  methods: {
-    handleCheck(row, key, value) {
-      this.$emit("handleCheck", row, key, value);
-    },
   },
 };
 </script>
 
 <style lang="less">
 .expandDetail {
+  display: flex;
+  justify-content: space-between;
   .inline {
-    display: inline-block;
+    width: 0;
+    flex: 0 0 30px;
+    .ivu-checkbox-label-text {
+      padding-left: 0;
+    }
   }
 }
 </style>

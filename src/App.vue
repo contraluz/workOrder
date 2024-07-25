@@ -252,77 +252,77 @@ export default {
   mounted() {
     this.isPhone = window.innerWidth < 800;
     this.queryTableHeaders();
-    // this.search();
+    this.search();
   },
   methods: {
     queryTableHeaders() {
       axios
         .get("/api/pipeline/queryTableHeaders")
         .then((res) => {
-          res = {
-            data: [
-              {
-                id: 37,
-                columnName: "orderId",
-                chineseName: "单号",
-                stepOrder: 1,
-              },
-              {
-                id: 38,
-                columnName: "step1",
-                chineseName: "切割",
-                stepOrder: 2,
-              },
-              {
-                id: 39,
-                columnName: "step2",
-                chineseName: "磨边",
-                stepOrder: 3,
-              },
-              {
-                id: 40,
-                columnName: "step3",
-                chineseName: "钢化",
-                stepOrder: 4,
-              },
-              {
-                id: 41,
-                columnName: "step4",
-                chineseName: "捡片",
-                stepOrder: 5,
-              },
-              {
-                id: 42,
-                columnName: "step5",
-                chineseName: "中空",
-                stepOrder: 6,
-              },
-              {
-                id: 43,
-                columnName: "step6",
-                chineseName: "夹胶",
-                stepOrder: 7,
-              },
-              {
-                id: 44,
-                columnName: "step7",
-                chineseName: "包装",
-                stepOrder: 8,
-              },
-              {
-                id: 45,
-                columnName: "notes",
-                chineseName: "备注",
-                stepOrder: 9,
-              },
-              {
-                id: 46,
-                columnName: "deliverTime",
-                chineseName: "交付日期",
-                stepOrder: 10,
-              },
-            ],
-          };
+          // res = {
+          //   data: [
+          //     {
+          //       id: 37,
+          //       columnName: "orderId",
+          //       chineseName: "单号",
+          //       stepOrder: 1,
+          //     },
+          //     {
+          //       id: 38,
+          //       columnName: "step1",
+          //       chineseName: "切割",
+          //       stepOrder: 2,
+          //     },
+          //     {
+          //       id: 39,
+          //       columnName: "step2",
+          //       chineseName: "磨边",
+          //       stepOrder: 3,
+          //     },
+          //     {
+          //       id: 40,
+          //       columnName: "step3",
+          //       chineseName: "钢化",
+          //       stepOrder: 4,
+          //     },
+          //     {
+          //       id: 41,
+          //       columnName: "step4",
+          //       chineseName: "捡片",
+          //       stepOrder: 5,
+          //     },
+          //     {
+          //       id: 42,
+          //       columnName: "step5",
+          //       chineseName: "中空",
+          //       stepOrder: 6,
+          //     },
+          //     {
+          //       id: 43,
+          //       columnName: "step6",
+          //       chineseName: "夹胶",
+          //       stepOrder: 7,
+          //     },
+          //     {
+          //       id: 44,
+          //       columnName: "step7",
+          //       chineseName: "包装",
+          //       stepOrder: 8,
+          //     },
+          //     {
+          //       id: 45,
+          //       columnName: "notes",
+          //       chineseName: "备注",
+          //       stepOrder: 9,
+          //     },
+          //     {
+          //       id: 46,
+          //       columnName: "deliverTime",
+          //       chineseName: "交付日期",
+          //       stepOrder: 10,
+          //     },
+          //   ],
+          // };
           if (this.isPhone) {
             this.columns = [
               {
@@ -330,16 +330,12 @@ export default {
                 width: 50,
                 render: (h, params) =>
                   h(expandDetail, {
-                    props: {
-                      steps: res.data.filter((item) =>
-                        item.columnName.includes("step")
-                      ),
-                      row: params.row,
-                    },
-                    on: {
-                      handleCheck: (row, key, value) => {
-                        this.handleCheck(row, key, value);
-                      },
+                    steps: res.data.filter((item) =>
+                      item.columnName.includes("step")
+                    ),
+                    row: params.row,
+                    handleCheck: (row, key, value) => {
+                      this.handleCheck(row, key, value);
                     },
                   }),
               },
@@ -549,6 +545,9 @@ export default {
   }
   .ivu-table .table-overtime-row td {
     background-color: #fadfdf;
+  }
+  .ivu-table .ivu-table-expanded-cell {
+    padding: 10px;
   }
 }
 @keyframes autoFresh {
