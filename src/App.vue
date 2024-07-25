@@ -387,7 +387,7 @@ export default {
         )
         .then((res) => {
           this.$Message.success("状态修改成功");
-          this.search();
+          !this.isPhone && this.search();
         })
         .catch((err) => {
           row[key] = !row[key];
