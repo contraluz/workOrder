@@ -252,109 +252,89 @@ export default {
   mounted() {
     this.isPhone = window.innerWidth < 800;
     this.queryTableHeaders();
-    this.search();
+    // this.search();
   },
   methods: {
     queryTableHeaders() {
       axios
         .get("/api/pipeline/queryTableHeaders")
         .then((res) => {
-          // res = {
-          //   data: [
-          //     {
-          //       id: 37,
-          //       columnName: "orderId",
-          //       chineseName: "单号",
-          //       stepOrder: 1,
-          //     },
-          //     {
-          //       id: 38,
-          //       columnName: "step1",
-          //       chineseName: "切割",
-          //       stepOrder: 2,
-          //     },
-          //     {
-          //       id: 39,
-          //       columnName: "step2",
-          //       chineseName: "磨边",
-          //       stepOrder: 3,
-          //     },
-          //     {
-          //       id: 40,
-          //       columnName: "step3",
-          //       chineseName: "钢化",
-          //       stepOrder: 4,
-          //     },
-          //     {
-          //       id: 41,
-          //       columnName: "step4",
-          //       chineseName: "捡片",
-          //       stepOrder: 5,
-          //     },
-          //     {
-          //       id: 42,
-          //       columnName: "step5",
-          //       chineseName: "中空",
-          //       stepOrder: 6,
-          //     },
-          //     {
-          //       id: 43,
-          //       columnName: "step6",
-          //       chineseName: "夹胶",
-          //       stepOrder: 7,
-          //     },
-          //     {
-          //       id: 44,
-          //       columnName: "step7",
-          //       chineseName: "包装",
-          //       stepOrder: 8,
-          //     },
-          //     {
-          //       id: 45,
-          //       columnName: "notes",
-          //       chineseName: "备注",
-          //       stepOrder: 9,
-          //     },
-          //     {
-          //       id: 46,
-          //       columnName: "deliverTime",
-          //       chineseName: "交付日期",
-          //       stepOrder: 10,
-          //     },
-          //   ],
-          // };
+          res = {
+            data: [
+              {
+                id: 37,
+                columnName: "orderId",
+                chineseName: "单号",
+                stepOrder: 1,
+              },
+              {
+                id: 38,
+                columnName: "step1",
+                chineseName: "切割",
+                stepOrder: 2,
+              },
+              {
+                id: 39,
+                columnName: "step2",
+                chineseName: "磨边",
+                stepOrder: 3,
+              },
+              {
+                id: 40,
+                columnName: "step3",
+                chineseName: "钢化",
+                stepOrder: 4,
+              },
+              {
+                id: 41,
+                columnName: "step4",
+                chineseName: "捡片",
+                stepOrder: 5,
+              },
+              {
+                id: 42,
+                columnName: "step5",
+                chineseName: "中空",
+                stepOrder: 6,
+              },
+              {
+                id: 43,
+                columnName: "step6",
+                chineseName: "夹胶",
+                stepOrder: 7,
+              },
+              {
+                id: 44,
+                columnName: "step7",
+                chineseName: "包装",
+                stepOrder: 8,
+              },
+              {
+                id: 45,
+                columnName: "notes",
+                chineseName: "备注",
+                stepOrder: 9,
+              },
+              {
+                id: 46,
+                columnName: "deliverTime",
+                chineseName: "交付日期",
+                stepOrder: 10,
+              },
+            ],
+          };
           if (this.isPhone) {
-            this.columns = [
-              {
-                type: "expand",
-                width: 50,
-                render: (h, params) =>
-                  h(expandDetail, {
-                    steps: res.data.filter((item) =>
-                      item.columnName.includes("step")
-                    ),
-                    row: params.row,
-                    handleCheck: (row, key, value) => {
-                      this.handleCheck(row, key, value);
-                    },
-                  }),
-              },
-              {
-                key: "orderId",
-                slot: "orderId",
-                title: "单号",
-              },
-              {
-                key: "notes",
-                title: "备注",
-                slot: "notes",
-              },
-              {
-                key: "deliverTime",
-                title: "交付日期",
-                slot: "deliverTime",
-              },
-            ];
+            this.columns = res.data.map((item) => ({
+              title: item.chineseName,
+              key: item.columnName,
+              width: item.columnName === 'orderId' ? 120 : 100,
+              fixed: item.columnName === 'orderId' ? 'left' : null,
+              slot:
+                item.columnName.includes("step") ||
+                ["deliverTime", "notes", "orderId"].includes(item.columnName)
+                  ? item.columnName
+                  : null,
+            }));
             return;
           }
           this.columns = res.data.map((item) => ({
@@ -387,7 +367,7 @@ export default {
         )
         .then((res) => {
           this.$Message.success("状态修改成功");
-          this.search();
+          !this.isPhone && this.search();
         })
         .catch((err) => {
           row[key] = !row[key];
@@ -416,9 +396,6 @@ export default {
         )
         .then((res) => {
           this.total = res.data.total || 0;
-          if (this.isPhone) {
-            res.data.list.forEach(i => i._expanded = true);
-          }
           this.tableData = res.data.list || [];
           if (this.pageNo === 1 && this.total === 0) {
             // 首页无数据，定时刷新第一页
